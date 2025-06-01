@@ -1,18 +1,30 @@
-package com.speechify.LRUCache;
 
-/**
- *
- * Use the provided com.speechify.LRUCacheProviderTest in `src/test/java/LruCacheTest.java` to validate your
- * implementation.
- *
- * You may:
- *  - Read online API references for Java standard library or JVM collections.
- * You must not:
- *  - Read guides about how to code an LRU cache.
- */
+Kancharla Vasavi <kancherlavasvi13@gmail.com>
+9:47 AM (0 minutes ago)
+to me
 
-public class LRUCacheProvider {
-    public static <T> LRUCache<T> createLRUCache(CacheLimits options) {
-        throw new UnsupportedOperationException("Implement this function");
+function createLRUCacheProvider(maxSize: number) {
+  const cache = new Map();
+
+  function get(key: string): any {
+    if (!cache.has(key)) return undefined;
+
+    const value = cache.get(key);
+    cache.delete(key); // move to the end
+    cache.set(key, value);
+    return value;
+  }
+
+  function set(key: string, value: any): void {
+    if (cache.has(key)) {
+      cache.delete(key); // update order
+    } else if (cache.size >= maxSize) {
+      const oldestKey = cache.keys().next().value;
+      cache.delete(oldestKey);
     }
+    cache.set(key, value);
+  }
+
+  return { get, set };
 }
+
